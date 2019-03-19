@@ -11,19 +11,7 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "localhost"
 basePath: "/api/v1"
-tags:
-  - name: "pet"
-    description: "Everything about your Pets"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
-  - name: "store"
-    description: "Access to Petstore orders"
-  - name: "user"
-    description: "Operations about user"
-    externalDocs:
-      description: "Find out more about our store"
-      url: "http://swagger.io"
+
 schemes:
   #- "https"
   - "http"
@@ -150,7 +138,52 @@ paths:
             - "write:pets"
             - "read:pets"
 
+  /proposal:
+    get:
+      summary: "Marquer son intérêt pour un projet"
+      description: ""
+      operationId: "ListProposal"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      #parameters:
+
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ProposalPagination"
+      security:
+        - petstore_auth:
+            - "write:pets"
+            - "read:pets"
+
   /proposal/{id}:
+    get:
+      summary: "Marquer son intérêt pour un projet"
+      description: ""
+      operationId: "ReadProposal"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID de la proposition d'investissement"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Proposal"
+      security:
+        - petstore_auth:
+            - "write:pets"
+            - "read:pets"
     put:
       summary: "Marquer son intérêt pour un projet"
       description: ""
@@ -257,7 +290,8 @@ definitions:
         $ref: "#/definitions/Project"
     #xml:
     #  name: "Category"
-  ProjectPagination:
+
+  AbstractPagination:
     properties:
       totalCount:
         description: nombre total de résultats
@@ -278,10 +312,23 @@ definitions:
         description: tri DESC ou ASC
         type: string
         enum: ["ASC", "DESC"]
+
+  ProjectPagination:
+    allOf:
+      - $ref: '#/definitions/AbstractPagination'
+    properties:
       items:
         type: array
         items:
           $ref: "#/definitions/Project"
+  ProposalPagination:
+    allOf:
+      - $ref: '#/definitions/AbstractPagination'
+    properties:
+      items:
+        type: array
+        items:
+          $ref: "#/definitions/Proposal"
   #ApiResponse:
   #  type: "object"
   #  properties:
