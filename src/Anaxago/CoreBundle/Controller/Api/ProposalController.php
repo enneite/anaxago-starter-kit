@@ -23,7 +23,7 @@ class ProposalController  extends ApiController
      */
     public function listAction()
     {
-        return $this->sendJsonResponse([]);
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->listProposals($this->getUser()));
     }
 
     /**
@@ -34,7 +34,7 @@ class ProposalController  extends ApiController
      */
     public function createAction($projectId)
     {
-        return $this->sendJsonResponse([], 201);
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->createProposal($projectId, $this->getUser()), 201);
     }
 
     /**
@@ -45,7 +45,7 @@ class ProposalController  extends ApiController
      */
     public function readAction($id)
     {
-        return $this->sendJsonResponse([]);
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->readProposal($id, $this->getUser()));
     }
 
     /**
@@ -56,7 +56,7 @@ class ProposalController  extends ApiController
      */
     public function updateAction($id)
     {
-        return $this->sendJsonResponse([]);
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->updateProposal($id, $this->getUser()));
     }
 
     /**
@@ -67,6 +67,6 @@ class ProposalController  extends ApiController
      */
     public function deleteAction($id)
     {
-        return $this->sendJsonResponse([], 204);
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->deleteProposal($id, $this->getUser()), 204);
     }
 }

@@ -24,7 +24,7 @@ class ProjectsController extends ApiController
      */
     public function listAction()
     {
-        return $this->sendJsonResponse([]);
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_project')->listProjects());
     }
 
     /**
@@ -35,7 +35,7 @@ class ProjectsController extends ApiController
      */
     public function readAction($id)
     {
-        return $this->sendJsonResponse([]);
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_project')->readProject($id));
     }
 
 
