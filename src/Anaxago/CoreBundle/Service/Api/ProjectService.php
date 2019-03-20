@@ -9,17 +9,38 @@
 namespace Anaxago\CoreBundle\Service\Api;
 
 
+use Anaxago\CoreBundle\Model\Api\Collection;
+use Anaxago\CoreBundle\Model\Api\Mapping;
+use Anaxago\CoreBundle\Model\Api\Project;
+use Anaxago\CoreBundle\Model\Api\ProjectPagination;
+
 class ProjectService
 {
 
-    public function __construct()
+    protected $repository;
+
+    public function __construct($repository)
     {
-        return array();
+        $this->repository = $repository;
     }
 
     public function listProjects()
     {
-        return [];
+        $pagination = new ProjectPagination();
+
+        $pagination->setTotalCount($this->repository->count());
+
+        $entities = $this->repository->findAll();
+        $collection = new Collection();
+        foreach ($entities as $entity) {
+            $item = new Project();
+            $item = Mapping::buildFromObject($item, $entity);
+            $collection->push($item);
+        }
+        $pagination->setItems($collection);
+
+
+        return $pagination->toArray();
     }
 
     public function readProject(int $id)

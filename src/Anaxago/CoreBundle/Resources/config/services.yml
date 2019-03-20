@@ -1,9 +1,16 @@
 services:
 
+  anaxago_core_repository_project:
+    class: Anaxago\CoreBundle\Repository\ProjectRepository
+    factory : ['@doctrine.orm.entity_manager', 'getRepository']
+    arguments:
+      - Anaxago\CoreBundle\Entity\Project
+
+
   anaxago_core_service_api_project:
     class: Anaxago\CoreBundle\Service\Api\ProjectService
-    arguments: []
+    arguments: ['@anaxago_core_repository_project']
 
   anaxago_core_service_api_proposal:
     class: Anaxago\CoreBundle\Service\Api\ProposalService
-    arguments: []
+    arguments: ['@doctrine.orm.entity_manager']

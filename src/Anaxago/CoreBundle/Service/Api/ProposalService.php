@@ -13,9 +13,11 @@ use Anaxago\CoreBundle\Entity\User;
 
 class ProposalService
 {
-    public function __construct()
-    {
+    protected $entityManager;
 
+    public function __construct($entityManager)
+    {
+        $this->entityManager = $entityManager;
     }
 
     public function listProposals(User $user)

@@ -10,4 +10,28 @@ namespace Anaxago\CoreBundle\Repository;
  */
 class ProjectRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * nb total de projets
+     *
+     * @return int
+     */
+    public function count() : int
+    {
+        return $this->createQueryBuilder('p')
+        ->select('count(p.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
+
+    public function findAll($page=1, $max=10)
+    {
+        $firstResult = ($page - 1) * $max;
+
+        return $this->createQueryBuilder('b')
+            ->select()
+            ->setFirstResult($firstResult)
+            ->setMaxResults($max)
+            ->getQuery()
+            ->getResult();
+    }
 }
