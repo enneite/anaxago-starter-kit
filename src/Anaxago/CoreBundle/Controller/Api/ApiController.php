@@ -9,7 +9,32 @@
 namespace Anaxago\CoreBundle\Controller\Api;
 
 
-class ApiController
-{
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * classe abstraite pour mutualiser certaines méthodes de formatage
+ *
+ * Class ApiController
+ * @package Anaxago\CoreBundle\Controller\Api
+ */
+abstract class ApiController extends Controller
+{
+    /**
+     * @param array $data
+     * @param int   $status
+     *
+     * @return JsonResponse
+     */
+    protected function sendJsonResponse(array $data, $status = 200, $headers=array())
+    {
+        $response = new JsonResponse($data);
+        $response->setStatusCode($status);
+
+        foreach($headers as $key => $value) {
+            $response->headers->set($key, $value);
+        }
+
+        return $response;
+    }
 }

@@ -1,0 +1,41 @@
+api_post_show:
+  path:     /public/projects
+  defaults: { _controller: AnaxagoCoreBundle:Api\Projects:list }
+  methods:  [GET]
+
+
+projects_list:
+  path: /projects
+  methods: [GET]
+  defaults: { _controller: AnaxagoCoreBundle:Api\Projects:list}
+
+projects_read:
+  path: /project/{id}
+  methods: [GET]
+  defaults: { _controller: AnaxagoCoreBundle:Api\Projects:read}
+
+proposal_list:
+  path: /proposal
+  methods: [GET]
+  defaults: { _controller: AnaxagoCoreBundle:Api\Proposal:list}
+
+proposal_create:
+  path: /proposal/project/{projectId}
+  methods: [POST]
+  defaults: { _controller: AnaxagoCoreBundle:Api\Proposal:create}
+
+
+proposal_read:
+  path: /proposal/{id}
+  methods: [GET]
+  defaults: { _controller: AnaxagoCoreBundle:Api\Proposal:read}
+
+proposal_update:
+  path: /proposal/{id}
+  methods: [GET]
+  defaults: { _controller: AnaxagoCoreBundle:Api\Proposal:update}
+
+proposal_delete:
+  path: /proposal/{id}
+  methods: [GET]
+  defaults: { _controller: AnaxagoCoreBundle:Api\Proposal:delete}
