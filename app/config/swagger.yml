@@ -16,6 +16,35 @@ schemes:
   #- "https"
   - "http"
 paths:
+  /public/projects:
+    get:
+      tags:
+        - "pet"
+      summary: "Lit les projets"
+      description: "Lit les projes"
+      operationId: "listPublicProjects"
+      produces:
+        #- "application/xml"
+        - "application/json"
+      parameters:
+        - name: "status"
+          in: "query"
+          description: "filtre les projets par leurs statut"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProjectPagination"
+        400:
+          description: "Invalid status value"
+      security:
+        - petstore_auth:
+            - "write:pets"
+            - "read:pets"
 
   /projects:
     get:
@@ -42,10 +71,10 @@ paths:
               $ref: "#/definitions/ProjectPagination"
         400:
           description: "Invalid status value"
-      #security:
-      #  - petstore_auth:
-      #      - "write:pets"
-      #      - "read:pets"
+      security:
+        - petstore_auth:
+            - "write:pets"
+            - "read:pets"
 
 
   /projects/{id}:
@@ -251,8 +280,7 @@ definitions:
         type: "integer"
         format: "int64"
       amount:
-        type: "integer"
-        format: "int64"
+        type: "number"
         description: "montant d'investissement souhaité"
       currency:
         type: "string"
