@@ -24,13 +24,13 @@ class ProjectService
         $this->repository = $repository;
     }
 
-    public function listProjects()
+    public function listProjects($page, $max)
     {
         $pagination = new ProjectPagination();
 
         $pagination->setTotalCount($this->repository->count());
 
-        $entities = $this->repository->findAll();
+        $entities = $this->repository->findAll($page, $max);
         $collection = new Collection();
         foreach ($entities as $entity) {
             $item = new Project();
@@ -38,6 +38,8 @@ class ProjectService
             $collection->push($item);
         }
         $pagination->setItems($collection);
+        $pagination->setMax($max);
+        $pagination->setPage($page);
 
 
         return $pagination->toArray();

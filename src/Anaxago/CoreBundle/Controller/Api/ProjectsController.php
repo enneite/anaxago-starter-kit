@@ -8,6 +8,8 @@
 
 namespace Anaxago\CoreBundle\Controller\Api;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * controleur gerant les projets diffusés par l'API
  *
@@ -22,9 +24,12 @@ class ProjectsController extends ApiController
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
-        return $this->sendJsonResponse($this->get('anaxago_core_service_api_project')->listProjects());
+        $page   = $request->query->has('page') ? $request->query->get('page') : 1;
+        $max = $request->query->has('max') ? $request->query->get('max') : 10;
+
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_project')->listProjects($page, $max));
     }
 
     /**
