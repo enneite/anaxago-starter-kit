@@ -24,6 +24,13 @@ class ProjectService
         $this->repository = $repository;
     }
 
+    /**
+     * Liste paginée des projets
+     *
+     * @param $page
+     * @param $max
+     * @return array
+     */
     public function listProjects($page, $max)
     {
         $pagination = new ProjectPagination();
@@ -45,8 +52,19 @@ class ProjectService
         return $pagination->toArray();
     }
 
+    /**
+     * lecture d'un projet par son ID
+     *
+     *
+     * @param int $id
+     * @return mixed
+     */
     public function readProject(int $id)
     {
-        return [];
+        $entity = $this->repository->find($id);
+        $project = new Project();
+        $project = Mapping::buildFromObject($project, $entity);
+
+        return $project->toArray();
     }
 }
