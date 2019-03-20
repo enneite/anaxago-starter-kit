@@ -23,6 +23,13 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
         ->getSingleScalarResult();
     }
 
+    /**
+     * retrouver la liste des projets appartenant à une pagination
+     *
+     * @param int $page
+     * @param int $max
+     * @return array
+     */
     public function findAll($page=1, $max=10)
     {
         $firstResult = ($page - 1) * $max;

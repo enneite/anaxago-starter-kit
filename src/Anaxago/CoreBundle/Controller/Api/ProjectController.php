@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * controleur gerant les projets diffusés par l'API
  *
- * Class ProjectsController
+ * Class ProjectController
  * @package Anaxago\CoreBundle\Controller\Api
  */
-class ProjectsController extends ApiController
+class ProjectController extends ApiController
 {
 
     /**

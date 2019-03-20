@@ -1,18 +1,13 @@
-api_post_show:
-  path:     /public/projects
-  defaults: { _controller: AnaxagoCoreBundle:Api\Projects:list }
-  methods:  [GET]
-
 
 projects_list:
-  path: /projects
+  path: /project
   methods: [GET]
-  defaults: { _controller: AnaxagoCoreBundle:Api\Projects:list}
+  defaults: { _controller: AnaxagoCoreBundle:Api\Project:list}
 
 projects_read:
   path: /project/{id}
   methods: [GET]
-  defaults: { _controller: AnaxagoCoreBundle:Api\Projects:read}
+  defaults: { _controller: AnaxagoCoreBundle:Api\Project:read}
 
 proposal_list:
   path: /proposal
