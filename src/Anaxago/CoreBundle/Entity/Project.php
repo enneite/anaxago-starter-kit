@@ -2,6 +2,7 @@
 
 namespace Anaxago\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +43,18 @@ class Project
      */
     private $description;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Proposal", mappedBy="project")
+     */
+    protected $proposals;
+
+
+    public function __construct()
+    {
+        $this->proposals = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -124,5 +137,41 @@ class Project
     {
         return $this->description;
     }
+
+
+    /**
+     * ajouter des propositions de fianncement
+     *
+     * @param Proposal
+     *
+     * @return Language
+     */
+    public function addProposal(Proposal $proposal)
+    {
+        $this->proposals[] = $proposal;
+
+        return $this;
+    }
+
+    /**
+     * suprimer des propositions de financement
+     *
+     * @param Proposal
+     */
+    public function removeProposal(Proposal $proposal)
+    {
+        $this->proposals->removeElement($proposal);
+    }
+
+    /**
+     * Get proposal.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProposals()
+    {
+        return $this->proposals;
+    }
+
 }
 

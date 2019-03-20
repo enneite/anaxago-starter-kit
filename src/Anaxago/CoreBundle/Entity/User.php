@@ -75,6 +75,20 @@ class User implements UserInterface
      */
     private $email;
 
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Proposal", mappedBy="user")
+     */
+    protected $proposals;
+
+
+    public function __construct()
+    {
+        $this->proposals = new ArrayCollection();
+    }
+
     /**
      * @return int
      */
@@ -276,5 +290,39 @@ class User implements UserInterface
     public function eraseCredentials(): void
     {
         $this->plainPassword = null;
+    }
+
+    /**
+     * ajouter des propositions de fianncement
+     *
+     * @param Proposal
+     *
+     * @return Language
+     */
+    public function addProposal(Proposal $proposal)
+    {
+        $this->proposals[] = $proposal;
+
+        return $this;
+    }
+
+    /**
+     * suprimer des propositions de financement
+     *
+     * @param Proposal
+     */
+    public function removeProposal(Proposal $proposal)
+    {
+        $this->proposals->removeElement($proposal);
+    }
+
+    /**
+     * Get proposal.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProposals()
+    {
+        return $this->proposals;
     }
 }
