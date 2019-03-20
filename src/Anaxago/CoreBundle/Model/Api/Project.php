@@ -14,7 +14,7 @@ namespace Anaxago\CoreBundle\Model\Api;
  * Class Project
  * @package Anaxago\CoreBundle\Model\Api
  */
-class Project
+class Project implements DefinitionInterface
 {
     /**
      * ID du projet
@@ -54,7 +54,7 @@ class Project
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -70,7 +70,7 @@ class Project
     /**
      * @return string
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
@@ -86,7 +86,7 @@ class Project
     /**
      * @return string
      */
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -102,7 +102,7 @@ class Project
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -118,7 +118,7 @@ class Project
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -129,6 +129,21 @@ class Project
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->getId(),
+            'status' => $this->getStatus(),
+            'slug' => $this->getSlug(),
+            'description' => $this->getDescription(),
+            'title' => $this->getTitle(),
+
+        ];
     }
 
 

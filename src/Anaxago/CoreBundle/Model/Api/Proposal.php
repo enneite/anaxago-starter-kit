@@ -14,7 +14,7 @@ namespace Anaxago\CoreBundle\Model\Api;
  * Class Proposal
  * @package Anaxago\CoreBundle\Model\Api
  */
-class Proposal
+class Proposal implements DefinitionInterface
 {
     /**
      * ID de la proposition de financement
@@ -47,7 +47,7 @@ class Proposal
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -63,7 +63,7 @@ class Proposal
     /**
      * @return float
      */
-    public function getAmount(): float
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
@@ -79,7 +79,7 @@ class Proposal
     /**
      * @return string
      */
-    public function getCurrency(): string
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
@@ -95,7 +95,7 @@ class Proposal
     /**
      * @return Project
      */
-    public function getProject(): Project
+    public function getProject(): ?Project
     {
         return $this->project;
     }
@@ -108,6 +108,19 @@ class Proposal
         $this->project = $project;
     }
 
+    /**
+     * @return array
+     */
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->getId(),
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+            'project' => $this->getProject()->toArray(),
+
+        ];
+    }
 
 
 }

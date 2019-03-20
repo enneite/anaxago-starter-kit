@@ -15,13 +15,13 @@ namespace Anaxago\CoreBundle\Model\Api;
  * Class AbstractPagination
  * @package Anaxago\CoreBundle\Model\Api
  */
-abstract class AbstractPagination
+abstract class AbstractPagination implements DefinitionInterface
 {
     /**
      * nb total d'éléments
      * @var int
      */
-    protected $totalCount;
+    protected $totalCount = 0;
 
     /**
      * numéro de page
@@ -41,18 +41,18 @@ abstract class AbstractPagination
      * @var  string
      *
      */
-    protected $sort;
+    protected $sort = '';
 
     /**
      * tri ascendant descendant
      * @var
      */
-    protected $order;
+    protected $order = 'ASC';
 
     /**
-     * @var array
+     * @var Collection
      */
-    protected $item = [];
+    protected $items;
 
 
 
@@ -140,20 +140,33 @@ abstract class AbstractPagination
     /**
      * @return array
      */
-    public function getItem(): array
+    public function getItems(): Collection
     {
-        return $this->item;
+        return $this->items;
     }
 
     /**
      * @param array $item
      */
-    public function setItem(array $item): void
+    public function setItems(Collection $items): void
     {
-        $this->item = $item;
+        $this->items = $items;
     }
 
 
+    /**
+     * @return array
+     */
+    public function toArray() : array
+    {
+        return [
+            "totalCount" => $this->getTotalCount(),
+            "page" => $this->getPage(),
+            "max" => $this->getMax(),
+            "sort" => $this->getSort(),
+            "order" => $this->getOrder()
+        ];
+    }
 
 
 }
