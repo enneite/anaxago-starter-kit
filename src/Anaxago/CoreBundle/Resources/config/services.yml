@@ -12,6 +12,12 @@ services:
     arguments:
       - Anaxago\CoreBundle\Entity\Proposal
 
+  anaxago_core_repository_user_session:
+    class: Anaxago\CoreBundle\Repository\UserSessionRepository
+    factory: ['@doctrine.orm.entity_manager', 'getRepository']
+    arguments:
+      - Anaxago\CoreBundle\Entity\UserSession
+
 
   anaxago_core_service_api_project:
     class: Anaxago\CoreBundle\Service\Api\ProjectService
@@ -20,3 +26,16 @@ services:
   anaxago_core_service_api_proposal:
     class: Anaxago\CoreBundle\Service\Api\ProposalService
     arguments: ['@anaxago_core_repository_proposal']
+
+
+  anaxago_core_service_api_auth:
+    class: Anaxago\CoreBundle\Service\Api\AuthService
+    arguments: ['@doctrine.orm.entity_manager', '@security.user.provider.concrete.anaxago_provider']
+
+  anaxago_core_security_api_user_provider:
+    class: Anaxago\CoreBundle\Security\Api\ApiUserProvider
+    arguments: ['@anaxago_core_repository_user_session']
+
+  anaxago_core_security_api_authenticator:
+    class: Anaxago\CoreBundle\Security\Api\ApiAuthenticator
+    arguments: []

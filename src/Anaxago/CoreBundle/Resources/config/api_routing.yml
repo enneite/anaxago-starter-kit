@@ -27,10 +27,10 @@ proposal_read:
 
 proposal_update:
   path: /proposal/{id}
-  methods: [GET]
+  methods: [PUT]
   defaults: { _controller: AnaxagoCoreBundle:Api\Proposal:update}
 
 proposal_delete:
   path: /proposal/{id}
-  methods: [GET]
+  methods: [DELETE]
   defaults: { _controller: AnaxagoCoreBundle:Api\Proposal:delete}

@@ -12,8 +12,26 @@ security:
                 property: username
                 # if you're using multiple entity managers
                 # manager_name: customer
+        api_provider:
+            id: anaxago_core_security_api_user_provider
 
     firewalls:
+
+        #api publique
+        api_public:
+            stateless: true
+            pattern: ^/api/[A-Za-z0-9]+/project
+            anonymous: ~
+
+        #api en mode connecté
+        api:
+            stateless: true
+            pattern: ^/api
+            simple_preauth:
+                provider: api_provider
+                authenticator: anaxago_core_security_api_authenticator
+            #context: apicontext
+
         main:
             provider: anaxago_provider
             anonymous: ~

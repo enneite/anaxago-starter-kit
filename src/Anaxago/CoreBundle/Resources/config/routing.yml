@@ -2,6 +2,11 @@ anaxago_core_homepage:
     path:     /
     defaults: { _controller: AnaxagoCoreBundle:Default:index }
 
+anaxago_core_oauth:
+    path:     /oauth
+    methods: [POST]
+    defaults: { _controller: AnaxagoCoreBundle:Auth:index }
+
 anaxago_core_api:
     resource: "@AnaxagoCoreBundle/Resources/config/api_routing.yml"
     prefix:   %settings.api_route_prefix%

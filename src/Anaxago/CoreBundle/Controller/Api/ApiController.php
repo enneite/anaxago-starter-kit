@@ -11,6 +11,7 @@ namespace Anaxago\CoreBundle\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * classe abstraite pour mutualiser certaines méthodes de formatage
@@ -36,5 +37,22 @@ abstract class ApiController extends Controller
         }
 
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return array
+     */
+    protected function getJsonContent(Request $request)
+    {
+        $content = json_decode($request->getContent(), true);
+        if (!is_array($content)) {
+            throw new \InvalidArgumentException('bad json flow!');
+        }
+
+        return $content;
     }
 }
