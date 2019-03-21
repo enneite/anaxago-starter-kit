@@ -23,6 +23,9 @@ class ProposalController  extends ApiController
      */
     public function listAction()
     {
+        if(!$this->getuser()) {
+            return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+        }
         return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->listProposals($this->getUser()));
     }
 
@@ -34,6 +37,9 @@ class ProposalController  extends ApiController
      */
     public function createAction($projectId)
     {
+        if(!$this->getuser()) {
+            return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+        }
         return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->createProposal($projectId, $this->getUser()), 201);
     }
 
@@ -45,6 +51,9 @@ class ProposalController  extends ApiController
      */
     public function readAction($id)
     {
+        if(!$this->getuser()) {
+            return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+        }
         return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->readProposal($id, $this->getUser()));
     }
 
@@ -56,6 +65,9 @@ class ProposalController  extends ApiController
      */
     public function updateAction($id)
     {
+        if(!$this->getuser()) {
+            return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+        }
         return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->updateProposal($id, $this->getUser()));
     }
 
@@ -67,6 +79,9 @@ class ProposalController  extends ApiController
      */
     public function deleteAction($id)
     {
+        if(!$this->getuser()) {
+            return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+        }
         return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->deleteProposal($id, $this->getUser()), 204);
     }
 }
