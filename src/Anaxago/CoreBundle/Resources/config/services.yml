@@ -25,7 +25,7 @@ services:
 
   anaxago_core_service_api_proposal:
     class: Anaxago\CoreBundle\Service\Api\ProposalService
-    arguments: ['@anaxago_core_repository_proposal']
+    arguments: ['@doctrine.orm.entity_manager', '@anaxago_core_repository_proposal', '@anaxago_core_repository_project']
 
 
   anaxago_core_service_api_auth:

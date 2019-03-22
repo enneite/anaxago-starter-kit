@@ -35,7 +35,7 @@ class Proposal
      *
      * @var float
      *
-     * @ORM\Column(name="amount", type="decimal", precision=2, scale=1)
+     * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
      */
     private $amount;
 
@@ -58,7 +58,7 @@ class Proposal
      *
      * @Assert\NotBlank()
      */
-    private $creationdate;
+    private $creationDate;
 
     /**
      * @var \DateTime
@@ -132,17 +132,17 @@ class Proposal
     /**
      * @return \DateTime
      */
-    public function getCreationdate(): \DateTime
+    public function getCreationDate(): \DateTime
     {
-        return $this->creationdate;
+        return $this->creationDate;
     }
 
     /**
      * @param \DateTime $creationdate
      */
-    public function setCreationdate(\DateTime $creationdate): void
+    public function setCreationDate(\DateTime $creationDate): void
     {
-        $this->creationdate = $creationdate;
+        $this->creationDate = $creationDate;
     }
 
     /**

@@ -8,6 +8,10 @@
 
 namespace Anaxago\CoreBundle\Controller\Api;
 
+use Anaxago\CoreBundle\Exception\ProjectNotFoundException;
+use Anaxago\CoreBundle\Exception\ProposalAllreadyDoneException;
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * controleur de l'API gérant les propositions
  *
@@ -35,12 +39,25 @@ class ProposalController  extends ApiController
      * @param $projectId
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function createAction($projectId)
+    public function createAction(Request $request, $projectId)
     {
-        if(!$this->getuser()) {
-            return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+        try {
+            if(!$this->getuser()) {
+                return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+            }
+            $content = $this->getJsonContent($request);
+            return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->createProposal($projectId, $this->getUser(), $content), 201);
         }
-        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->createProposal($projectId, $this->getUser()), 201);
+        catch(ProjectNotFoundException $e){
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 404);
+        }
+        catch(ProposalAllreadyDoneException $e){
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 403);
+        }
+        catch(\Exception$e) {
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 500);
+        }
+
     }
 
     /**
