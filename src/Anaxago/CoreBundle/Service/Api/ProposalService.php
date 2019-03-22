@@ -22,6 +22,10 @@ use Doctrine\ORM\EntityRepository;
 use Anaxago\CoreBundle\Model\Api\Proposal as ApiProposal;
 use Anaxago\CoreBundle\Model\Api\Project as ApiProject;
 
+/**
+ * Class ProposalService
+ * @package Anaxago\CoreBundle\Service\Api
+ */
 class ProposalService
 {
     /**
@@ -53,6 +57,15 @@ class ProposalService
         return [];
     }
 
+    /**
+     * @param $projectId
+     * @param User $user
+     * @param array $content
+     * @return array
+     * @throws ProjectNotFoundException
+     * @throws ProposalAllreadyDoneException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function createProposal($projectId, User $user, array $content)
     {
         $projectEntity = $this->projectRepository->find($projectId);
@@ -81,6 +94,12 @@ class ProposalService
         return $this->mapEntityToApiModel($entity)->toArray();
     }
 
+    /**
+     * @param $id
+     * @param User $user
+     * @return array
+     * @throws ProposalNotFoundException
+     */
     public function readProposal($id, User $user)
     {
         $entity = $this->repository->find($id);
@@ -91,9 +110,32 @@ class ProposalService
         return $this->mapEntityToApiModel($entity)->toArray();
     }
 
-    public function updateProposal($id, User $user)
+    /**
+     * seul le montant peut être mis à jour
+     *
+     * @param $id
+     * @param User $user
+     * @param $content
+     * @throws AuthorizationException
+     * @throws ProposalNotFoundException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateProposal($id, User $user, $content)
     {
-        return [];
+        $entity = $this->repository->find($id);
+        if(null == $entity) {
+            throw new ProposalNotFoundException('Proposal not found');
+        }
+        if($entity->getUser() != $user) {
+            throw new AuthorizationException('Not authorized deeletion');
+        }
+        $entity->setAmount($content['amount']);
+        $entity->setLastUpdate(new \DateTime());
+
+        $this->em->persist($entity);
+        $this->em->flush();
+
+        return $this->mapEntityToApiModel($entity)->toArray();
     }
 
     public function deleteProposal($id, User $user)

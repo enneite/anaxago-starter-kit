@@ -81,12 +81,24 @@ class ProposalController  extends ApiController
      * @param $id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function updateAction($id)
+    public function updateAction(Request $request, $id)
     {
-        if(!$this->getuser()) {
-            return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+        try{
+            if(!$this->getuser()) {
+                return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+            }
+            $content = $this->getJsonContent($request);
+            return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->updateProposal($id, $this->getUser(), $content));
         }
-        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->updateProposal($id, $this->getUser()));
+        catch(ProjectNotFoundException $e){
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 404);
+        }
+        catch(AuthorizationException $e){
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 403);
+        }
+        catch(\Exception $e) {
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -109,7 +121,7 @@ class ProposalController  extends ApiController
         catch(AuthorizationException $e){
             return $this->sendJsonResponse(['message' => $e->getMessage()], 403);
         }
-        catch(\Exception$e) {
+        catch(\Exception $e) {
             return $this->sendJsonResponse(['message' => $e->getMessage()], 500);
         }
 
