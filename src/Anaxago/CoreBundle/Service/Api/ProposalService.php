@@ -15,7 +15,9 @@ use Anaxago\CoreBundle\Exception\AuthorizationException;
 use Anaxago\CoreBundle\Exception\ProjectNotFoundException;
 use Anaxago\CoreBundle\Exception\ProposalAllreadyDoneException;
 use Anaxago\CoreBundle\Exception\ProposalNotFoundException;
+use Anaxago\CoreBundle\Model\Api\Collection;
 use Anaxago\CoreBundle\Model\Api\Mapping;
+use Anaxago\CoreBundle\Model\Api\ProposalPagination;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
@@ -52,9 +54,31 @@ class ProposalService
         $this->projectRepository = $projetRepository;
     }
 
-    public function listProposals(User $user)
+    /**
+     * Lister les propositions d'un utilisateur
+     * @param User $user
+     * @param $page
+     * @param $max
+     * @return array
+     */
+    public function listProposals(User $user, $page, $max)
     {
-        return [];
+        $pagination = new ProposalPagination();
+
+        $pagination->setTotalCount($this->repository->countByUser($user));
+
+        $entities = $this->repository->findAllByUser($user, $page, $max);
+        $collection = new Collection();
+        foreach ($entities as $entity) {
+            $item = $this->mapEntityToApiModel($entity);
+            $collection->push($item);
+        }
+        $pagination->setItems($collection);
+        $pagination->setMax($max);
+        $pagination->setPage($page);
+
+
+        return $pagination->toArray();
     }
 
     /**

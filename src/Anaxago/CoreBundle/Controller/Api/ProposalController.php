@@ -26,12 +26,15 @@ class ProposalController  extends ApiController
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
+        $page   = $request->query->has('page') ? $request->query->get('page') : 1;
+        $max = $request->query->has('max') ? $request->query->get('max') : 10;
+
         if(!$this->getuser()) {
             return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
         }
-        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->listProposals($this->getUser()));
+        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->listProposals($this->getUser(), $page, $max));
     }
 
     /**
