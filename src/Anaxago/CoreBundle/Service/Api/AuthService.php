@@ -97,6 +97,6 @@ class AuthService
     {
         $date = new \DateTime();
 
-        return str_replace('/','', base64_encode(hash('sha512', self::SALT . $login , $date->getTimestamp() . rand(0, 1000000))));
+        return str_replace('/','', base64_encode(hash('sha512', self::SALT . $login . $date->getTimestamp() . rand(0, 1000000))));
     }
 }
