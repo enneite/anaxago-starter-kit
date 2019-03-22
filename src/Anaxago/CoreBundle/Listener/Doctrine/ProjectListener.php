@@ -16,12 +16,14 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 class ProjectListener implements EventSubscriber
 {
+
+    protected $mailer;
     /**
      * ProposalListener constructor.
      */
-    public function __construct()
+    public function __construct(\Swift_Mailer $mailer)
     {
-
+        $this->mailer = $mailer;
     }
 
     /**
@@ -55,6 +57,13 @@ class ProjectListener implements EventSubscriber
             foreach($emails as $item) {
                 $email = $item['email'];
                 //@todo envoyer un email
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Project funded')
+                    ->setFrom('noreply@anaxago.com')
+                    ->setTo($email)
+                    ->setBody(sprintf('the project called "%s is funded', $entity->getTitle()));
+                $res = $this->mailer->send($message);
             }
         }
     }
