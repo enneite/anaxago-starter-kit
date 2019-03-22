@@ -30,7 +30,7 @@ services:
 
   anaxago_core_service_api_auth:
     class: Anaxago\CoreBundle\Service\Api\AuthService
-    arguments: ['@doctrine.orm.entity_manager', '@security.user.provider.concrete.anaxago_provider']
+    arguments: ['@doctrine.orm.entity_manager', '@security.user.provider.concrete.anaxago_provider', '%api_clients%']
 
   anaxago_core_security_api_user_provider:
     class: Anaxago\CoreBundle\Security\Api\ApiUserProvider

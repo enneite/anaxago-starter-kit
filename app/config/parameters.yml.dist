@@ -20,3 +20,7 @@ parameters:
 
     # teps limite d'une connexion à l'API
     api_access_token_ttl: 3600
+
+    api_clients:
+            - client_id: frontend
+              client_secret: monmotdepassesecret

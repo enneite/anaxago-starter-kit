@@ -37,10 +37,13 @@ class AuthService
 
     protected $em;
 
-    public function __construct(EntityManager $em, UserProviderInterface $provider)
+    protected $clients;
+
+    public function __construct(EntityManager $em, UserProviderInterface $provider, $clients)
     {
         $this->em = $em;
         $this->provider = $provider;
+        $this->clients = $clients;
     }
 
 
@@ -51,8 +54,18 @@ class AuthService
      * @return array
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function authenticate($username, $password, $ttl = null)
+    public function authenticate($username, $password, $clientId, $clientSecret, $ttl = null)
     {
+        $clientFound= false;
+        foreach ($this->clients as $client) {
+            if($client['client_id'] == $clientId && $client['client_secret'] == $clientSecret ) {
+                $clientFound = true;
+                break;
+            }
+        }
+        if(!$clientFound) {
+            throw new UnsupportedUserException('unknow client');
+        }
 
         $user = $this->provider->loadUserByUsername($username);
         if(!$user) {

@@ -50,7 +50,7 @@ class AuthController extends ApiController
     protected function authenticate($content)
     {
         $ttl         = $this->getParameter('api_access_token_ttl');
-        $accessInfos = $this->get('anaxago_core_service_api_auth')->authenticate($content['username'], $content['password'], $ttl);
+        $accessInfos = $this->get('anaxago_core_service_api_auth')->authenticate($content['username'], $content['password'], $content['client_id'], $content['client_secret'], $ttl);
         $protocol = 'http';
         $accessInfos['instance_url'] = $protocol . '://' . $_SERVER['SERVER_NAME'] . $this->getParameter('settings.api_route_prefix');
 

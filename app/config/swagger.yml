@@ -3,7 +3,7 @@ info:
   description: "API Anaxago. Pouvoir lister des projets et indiquer son intérêt pour leur financement."
   version: "0.0.1"
   title: "Anaxago Starter Kit"
-  termsOfService: "http://swagger.io/terms/"
+  termsOfService: "https://www.anaxago.com/"
   contact:
     email: "pitlejariel@hotmail.com"
   license:
@@ -20,8 +20,6 @@ paths:
 
   /project:
     get:
-      tags:
-        - "pet"
       summary: "Lit les projets"
       description: "Lit les projes"
       operationId: "listProjects"
@@ -43,15 +41,11 @@ paths:
               $ref: "#/definitions/ProjectPagination"
         400:
           description: "Invalid status value"
-      security:
-        - petstore_auth:
-            - "write:pets"
-            - "read:pets"
 
 
   /project/{id}:
     get:
-      summary: "Find pet by ID"
+      summary: "trouver un projet par son ID"
       description: "retourne un projet par son ID"
       operationId: "getPetById"
       produces:
@@ -73,10 +67,6 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "Pet not found"
-      security:
-        - petstore_auth:
-            - "write:pets"
-            - "read:pets"
 
   /proposal/project/{projectId}:
     post:
@@ -106,13 +96,12 @@ paths:
           schema:
             $ref: "#/definitions/Proposal"
       security:
-        - petstore_auth:
-            - "write:pets"
-            - "read:pets"
+        - api_auth:
+            - application:all
 
   /proposal:
     get:
-      summary: "Marquer son intérêt pour un projet"
+      summary: "Liste des propositions de financements de projet pour l'utilisateur connecté"
       description: ""
       operationId: "ListProposal"
       consumes:
@@ -127,13 +116,12 @@ paths:
           schema:
             $ref: "#/definitions/ProposalPagination"
       security:
-        - petstore_auth:
-            - "write:pets"
-            - "read:pets"
+        - api_auth:
+            - application:all
 
   /proposal/{id}:
     get:
-      summary: "Marquer son intérêt pour un projet"
+      summary: "Lit une proposition de financement grâce à son ID"
       description: ""
       operationId: "ReadProposal"
       consumes:
@@ -153,11 +141,10 @@ paths:
           schema:
             $ref: "#/definitions/Proposal"
       security:
-        - petstore_auth:
-            - "write:pets"
-            - "read:pets"
+        - api_auth:
+            - application:all
     put:
-      summary: "Marquer son intérêt pour un projet"
+      summary: "Modifier une proposition de financement"
       description: ""
       operationId: "updateProposal"
       consumes:
@@ -183,11 +170,10 @@ paths:
           schema:
             $ref: "#/definitions/Proposal"
       security:
-        - petstore_auth:
-            - "write:pets"
-            - "read:pets"
+        - api_auth:
+            - application:all
     delete:
-      summary: "Marquer son intérêt pour un projet"
+      summary: "Supprime une proposition de financement grâce à son ID"
       description: "deleteProposal"
       consumes:
         - "application/json"
@@ -206,23 +192,28 @@ paths:
           #schema:
           #  $ref: "#/definitions/Proposal"
       security:
-        - petstore_auth:
-            - "write:pets"
-            - "read:pets"
+        - api_auth:
+            - application:all
 
 
 securityDefinitions:
-  petstore_auth:
+  api_auth:
     type: "oauth2"
-    authorizationUrl: "http://localhost/oauth"
-    flow: "implicit"
+    tokenUrl: "http://localhost/oauth"
+    flow: "password"
+    description: |
+      Authentification à l'API
+      Méthode utilisée : POST
+      Paramètres à fournir au format JSON : {login}, {password}, {client_id}, {client_secret}
+      Nom du champ contenant le token: {access_token}
+      Façon de transmettre le token à l'API  :  Dans l'entête HTTP "Authorization" sous la forme "Bearer {access_token}"
     scopes:
-      write:pets: "modify pets in your account"
-      read:pets: "read your pets"
+      application:all: "scope unique pour l'ensemble des chemins connectés"
 
 
 definitions:
   Project:
+    description: "Projet pouvant recevoir un financement"
     type: "object"
     properties:
       id:
@@ -246,6 +237,7 @@ definitions:
     #xml:
     #  name: "Order"
   Proposal:
+    description: "Proposition de financement faite par un utilisateur"
     type: "object"
     properties:
       id:
