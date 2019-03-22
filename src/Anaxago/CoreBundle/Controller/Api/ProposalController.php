@@ -8,6 +8,7 @@
 
 namespace Anaxago\CoreBundle\Controller\Api;
 
+use Anaxago\CoreBundle\Exception\AuthorizationException;
 use Anaxago\CoreBundle\Exception\ProjectNotFoundException;
 use Anaxago\CoreBundle\Exception\ProposalAllreadyDoneException;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,9 +97,21 @@ class ProposalController  extends ApiController
      */
     public function deleteAction($id)
     {
-        if(!$this->getuser()) {
-            return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+        try{
+            if(!$this->getuser()) {
+                return $this->sendJsonResponse(['message' => 'Authentication required'], 401);
+            }
+            return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->deleteProposal($id, $this->getUser()), 204);
         }
-        return $this->sendJsonResponse($this->get('anaxago_core_service_api_proposal')->deleteProposal($id, $this->getUser()), 204);
+        catch(ProjectNotFoundException $e){
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 404);
+        }
+        catch(AuthorizationException $e){
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 403);
+        }
+        catch(\Exception$e) {
+            return $this->sendJsonResponse(['message' => $e->getMessage()], 500);
+        }
+
     }
 }

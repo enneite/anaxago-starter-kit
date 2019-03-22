@@ -11,8 +11,10 @@ namespace Anaxago\CoreBundle\Service\Api;
 
 use Anaxago\CoreBundle\Entity\Proposal;
 use Anaxago\CoreBundle\Entity\User;
+use Anaxago\CoreBundle\Exception\AuthorizationException;
 use Anaxago\CoreBundle\Exception\ProjectNotFoundException;
 use Anaxago\CoreBundle\Exception\ProposalAllreadyDoneException;
+use Anaxago\CoreBundle\Exception\ProposalNotFoundException;
 use Anaxago\CoreBundle\Model\Api\Mapping;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -75,23 +77,18 @@ class ProposalService
         $this->em->persist($entity);
         $this->em->flush();
 
-        //@fixme : reprendre le mapping par reflexion
-        //Mapping::buildFromObject($proposal, $entity);
-        $project = new ApiProject();
-        $project = Mapping::buildFromObject($project, $projectEntity);
-        $proposal = new ApiProposal();
-        $proposal->setId($entity->getId());
-        $proposal->setAmount($entity->getAmount());
-        $proposal->setCurrency($entity->getCurrency());
-        $proposal->setProject($project);
 
-
-        return $proposal->toArray();
+        return $this->mapEntityToApiModel($entity)->toArray();
     }
 
     public function readProposal($id, User $user)
     {
-        return [];
+        $entity = $this->repository->find($id);
+        if(null == $entity) {
+            throw new ProposalNotFoundException();
+        }
+
+        return $this->mapEntityToApiModel($entity)->toArray();
     }
 
     public function updateProposal($id, User $user)
@@ -101,6 +98,32 @@ class ProposalService
 
     public function deleteProposal($id, User $user)
     {
+        $entity = $this->repository->find($id);
+        if(null == $entity) {
+            throw new ProposalNotFoundException('Proposal not found');
+        }
+        if($entity->getUser() != $user) {
+            throw new AuthorizationException('Not authorized deeletion');
+        }
+        $this->em->remove($entity);
+        $this->em->flush();
+
         return [];
+    }
+
+    protected function mapEntityToApiModel(Proposal $entity):ApiProposal
+    {
+        //@fixme : reprendre le mapping par reflexion
+        //Mapping::buildFromObject($proposal, $entity);
+
+        $project = new ApiProject();
+        $project = Mapping::buildFromObject($project, $entity->getProject());
+        $proposal = new ApiProposal();
+        $proposal->setId($entity->getId());
+        $proposal->setAmount($entity->getAmount());
+        $proposal->setCurrency($entity->getCurrency());
+        $proposal->setProject($project);
+
+        return $proposal;
     }
 }
