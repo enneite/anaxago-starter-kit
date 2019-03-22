@@ -56,11 +56,7 @@ class ProposalListener  implements EventSubscriber
         $project = $entity->getProject();
         if($project->getStatus() == 'OPEN') {
             $em = $args->getEntityManager();
-
-
-            $query = $em->createQuery('SELECT SUM(p.amount) from Anaxago\CoreBundle\Entity\Proposal p JOIN p.project q WHERE q.id= :id');
-            $query->setParameter('id', $project->getId());
-            $sum = $query->getSingleScalarResult();
+            $sum = $em->getRepository('AnaxagoCoreBundle:Proposal')->sumByProject($project);
             if($sum>=$project->getAmount()) {
                 $project->setStatus('FUNDED');
                 $project->setReached(true);

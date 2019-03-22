@@ -56,7 +56,6 @@ class ProjectListener implements EventSubscriber
 
             foreach($emails as $item) {
                 $email = $item['email'];
-                //@todo envoyer un email
 
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Project funded')

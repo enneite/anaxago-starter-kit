@@ -8,6 +8,7 @@
 
 namespace Anaxago\CoreBundle\Repository;
 
+use Anaxago\CoreBundle\Entity\Project;
 use Anaxago\CoreBundle\Entity\User;
 
 /**
@@ -37,6 +38,23 @@ class ProposalRepository extends \Doctrine\ORM\EntityRepository
             ->setMaxResults($max)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * somme des financements pour un projet
+     *
+     * @param Project $project
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function sumByProject(Project $project)
+    {
+        return  $this->createQueryBuilder('p')
+            ->select('SUM(p.amount)')
+            ->join('p.project', 'q')->where('q.id= :id')->setParameter('id', $project->getId())
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
 
