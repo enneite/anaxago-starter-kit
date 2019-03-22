@@ -45,19 +45,11 @@ class AuthService
 
 
     /**
-     * user (partner) authentication.
-     *
-     *
-     *
-     * @param $login
+     * @param $username
      * @param $password
-     * @param $clientId
-     * @param $clientSecret
      * @param null $ttl
-     *
-     * @throws \Wbx\PartnersBundle\Exception\Oauth\ClientNotFoundException
-     *
      * @return array
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function authenticate($username, $password, $ttl = null)
     {
@@ -98,9 +90,8 @@ class AuthService
 
     /**
      * @param $login
-     * @param $clientName
-     *
-     * @return string
+     * @return mixed
+     * @throws \Exception
      */
     protected function generateNewAccessToken($login)
     {

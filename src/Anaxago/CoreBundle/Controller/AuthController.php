@@ -29,7 +29,7 @@ class AuthController extends ApiController
      *
      * @return JsonResponse
      */
-    public function indexAction(Request $request, UserPasswordEncoderInterface $encoder)
+    public function indexAction(Request $request)
     {
 
         try {
